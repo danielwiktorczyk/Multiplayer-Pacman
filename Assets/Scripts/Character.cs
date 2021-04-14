@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Pacman : MonoBehaviour
+public class Character : MonoBehaviour
 {
     [SerializeField] float speed = 3f;
 

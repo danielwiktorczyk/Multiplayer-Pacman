@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    private List<Tile> neighbors;
+    public List<Tile> Neighbors;
 
     private void Awake()
     {
@@ -20,7 +20,7 @@ public class Tile : MonoBehaviour
     {
         var colliders = Physics.OverlapSphere(transform.position, 1f);
 
-        this.neighbors = colliders
+        Neighbors = colliders
             .Where(collider => collider.GetComponent<Tile>() != null)
             .Select(collider => collider.GetComponent<Tile>())
             .Distinct()
@@ -39,7 +39,7 @@ public class Tile : MonoBehaviour
 
     public Tile TileAtOffset(Vector3 direction)
     {
-        return this.neighbors
+        return Neighbors
             .Where(tile => tile.transform.position == transform.position + direction)
             .FirstOrDefault();
     }
@@ -47,25 +47,25 @@ public class Tile : MonoBehaviour
     public Tile TileDirectlyInFront(Vector3 center, Vector3 direction)
     {
         if (direction == Vector3.forward)
-            return this.neighbors
+            return this.Neighbors
                 .Where(tile => tile.transform.position.z - transform.position.z > 0
                     && Mathf.Abs(tile.transform.position.x - center.x) < 0.1f)
                 .FirstOrDefault();
 
         if (direction == Vector3.right)
-            return this.neighbors
+            return Neighbors
                 .Where(tile => tile.transform.position.x - transform.position.x > 0
                     && Mathf.Abs(tile.transform.position.z - center.z) < 0.1f)
                 .FirstOrDefault();
 
         if (direction == Vector3.back)
-            return this.neighbors
+            return Neighbors
                 .Where(tile => tile.transform.position.z - transform.position.z < 0
                     && Mathf.Abs(tile.transform.position.x - center.x) < 0.1f)
                 .FirstOrDefault();
 
         if (direction == Vector3.left)
-            return this.neighbors
+            return Neighbors
                 .Where(tile => tile.transform.position.x - transform.position.x < 0
                     && Mathf.Abs(tile.transform.position.z - center.z) < 0.1f)
                 .FirstOrDefault();

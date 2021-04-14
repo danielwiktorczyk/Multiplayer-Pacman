@@ -1,8 +1,10 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Pacman : MonoBehaviour
+public class Ghost : MonoBehaviour
 {
     [SerializeField] float speed = 3f;
 
@@ -10,10 +12,13 @@ public class Pacman : MonoBehaviour
     private List<Tile> closestTiles;
 
     public Vector3 CurrentDirection;
-    public Vector3 DirectionBeforePause;
     private Vector3 bufferedDirection;
 
-    private bool isPaused;
+    public bool IsPaused;
+
+    private GhostController ghostController;
+
+    private float cool;
 
     public Tile CurrentTile()
     {
@@ -22,12 +27,8 @@ public class Pacman : MonoBehaviour
 
     private void Awake()
     {
-        this.isPaused = true;
-    }
-
-    internal void BufferDirection(Vector3 bufferedDirection)
-    {
-        this.bufferedDirection = bufferedDirection;
+        this.IsPaused = true;
+        this.ghostController = GetComponent<GhostController>();
     }
 
     void Start()
@@ -50,6 +51,8 @@ public class Pacman : MonoBehaviour
             transform.position.y,
             this.currentTile.transform.position.z
         );
+
+        //GetMovementFromController();
     }
 
     void Update()
@@ -72,29 +75,45 @@ public class Pacman : MonoBehaviour
 
     private void Move()
     {
-        StopWhenNoTileInFront();
+        StopAtJunction();
 
-        UpdateCurrentDirectionFromBuffer();
+        if (this.IsPaused)
+            GetMovementFromController();
 
         this.transform.position += this.CurrentDirection * Time.deltaTime * this.speed;
     }
 
-    private void StopWhenNoTileInFront()
+    private void GetMovementFromController()
     {
-        if (this.isPaused)
+        this.CurrentDirection = this.ghostController.GetMovement();
+        this.IsPaused = false;
+    }
+
+    private void StopAtJunction()
+    {
+        if (this.IsPaused)
             return;
 
-        var destinationTile = this.currentTile.TileAtOffset(this.CurrentDirection);
+        if (this.cool > 0)
+        {
+            this.cool -= Time.deltaTime;
+            return;
+        }
+        this.cool = 0.5f;
 
-        if (destinationTile != null)
+        var directionToCurrentTile = transform.position - this.currentTile.transform.position;
+        if (directionToCurrentTile.normalized != this.CurrentDirection)
             return;
 
-        var destinationTilePosition = this.currentTile.transform.position + this.CurrentDirection;
+        var directions = this.currentTile.Neighbors
+            .Where(tile => tile != currentTile)
+            .Select(tile => tile.transform.position - currentTile.transform.position)
+            .Select(direction => Normalize(direction))
+            .ToArray();
 
-        if (Distance2D(transform.position, destinationTilePosition) > 0.99f)
+        if (directions.Length < 2)
             return;
 
-        DirectionBeforePause = CurrentDirection;
         CurrentDirection = Vector3.zero;
         transform.position = new Vector3
         (
@@ -102,51 +121,8 @@ public class Pacman : MonoBehaviour
             transform.position.y,
             this.currentTile.transform.position.z
         );
-        this.isPaused = true;
-    }
-
-    private void UpdateCurrentDirectionFromBuffer()
-    {
-        if (this.bufferedDirection != Vector3.zero && this.isPaused)
-        {
-            HandleDirectionOnPause();
-            return;
-        }
-
-        if (this.bufferedDirection == Vector3.zero)
-            return;
-
-        if (IsOppositeDirection(this.CurrentDirection, this.bufferedDirection))
-        {
-            if (this.currentTile.TileDirectlyInFront(transform.position, this.bufferedDirection) is null)
-                return;
-        }
-        else
-        {
-            if (Distance2D(transform.position, this.currentTile.transform.position) > 0.01f)
-                return; // must be at a junction! So return
-
-            if (this.currentTile.TileAtOffset(this.bufferedDirection) is null)
-                return;
-
-            transform.position = new Vector3
-            (
-                this.currentTile.transform.position.x,
-                transform.position.y,
-                this.currentTile.transform.position.z
-            );
-        }
-
-        this.CurrentDirection = this.bufferedDirection;
-        this.bufferedDirection = Vector3.zero;
-    }
-
-    private void HandleDirectionOnPause()
-    {
-        this.CurrentDirection = this.bufferedDirection;
-        this.bufferedDirection = Vector3.zero;
-
-        this.isPaused = false;
+        
+        this.IsPaused = true;
     }
 
     public bool IsOppositeDirection(Vector3 a, Vector3 b)
@@ -173,4 +149,13 @@ public class Pacman : MonoBehaviour
             this.closestTiles.Remove(tile);
     }
 
+    private Vector3 Normalize(Vector3 direction)
+    {
+        var normalized = direction.normalized;
+        return new Vector3(Mathf.Round(normalized.x),
+            0,
+            Mathf.Round(normalized.z
+            )
+        );
+    }
 }

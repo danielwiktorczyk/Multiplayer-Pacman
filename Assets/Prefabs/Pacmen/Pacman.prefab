@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 7704844694376799402}
   - component: {fileID: 2366071670155546974}
   - component: {fileID: 6148922076789027336}
+  - component: {fileID: 6479672024719534273}
   - component: {fileID: 6372474247825969838}
   - component: {fileID: 447694868775149075}
-  - component: {fileID: 6479672024719534273}
   m_Layer: 0
   m_Name: Pacman
   m_TagString: Untagged
@@ -98,6 +98,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
+  CurrentDirection: {x: 0, y: 0, z: 0}
+--- !u!114 &6479672024719534273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7662971172219909591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3718a07074fb3e4bb1a5d0e81d52e0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &6372474247825969838
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -128,15 +141,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6479672024719534273
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7662971172219909591}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3718a07074fb3e4bb1a5d0e81d52e0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
