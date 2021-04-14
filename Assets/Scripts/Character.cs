@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Pacman : MonoBehaviour
+public class Character : MonoBehaviour
 {
     [SerializeField] float speed = 3f;
 
@@ -123,11 +124,8 @@ public class Pacman : MonoBehaviour
         }
         else
         {
-            if (!WouldMovePastCenterThisUpdate())
-                return;
-
-            //if (Distance2D(transform.position, this.currentTile.transform.position) > 0.01f)
-            //    return; // must be at a junction! So return
+            if (Distance2D(transform.position, this.currentTile.transform.position) > 0.01f)
+                return; // must be at a junction! So return
 
             if (this.currentTile.TileAtOffset(this.bufferedDirection) is null)
                 return;
@@ -142,29 +140,6 @@ public class Pacman : MonoBehaviour
 
         this.CurrentDirection = this.bufferedDirection;
         this.bufferedDirection = Vector3.zero;
-    }
-
-    private bool WouldMovePastCenterThisUpdate()
-    {
-        var currentPosition = transform.position;
-        var nextPosition = currentPosition
-                        + this.CurrentDirection * Time.deltaTime * this.speed;
-        var center = this.currentTile.transform.position;
-
-        if (this.CurrentDirection == Vector3.forward)
-            return center.z > currentPosition.z && center.z < nextPosition.z;
-
-        if (this.CurrentDirection == Vector3.right)
-            return center.x > currentPosition.x && center.x < nextPosition.x;
-
-        if (this.CurrentDirection == Vector3.back)
-            return center.z < currentPosition.z && center.z > nextPosition.z;
-
-        if (this.CurrentDirection == Vector3.left)
-            return center.x < currentPosition.x && center.x > nextPosition.x;
-
-
-        return false;
     }
 
     private void HandleDirectionOnPause()

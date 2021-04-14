@@ -14,28 +14,26 @@ public class PacmanController : MonoBehaviour
     void Update()
     {
         UpdateDirection();
-
-        this.pacman.BufferDirection(this.bufferedDirection);
     }
 
     private void UpdateDirection()
     {
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            this.bufferedDirection = Vector3.forward;
-        }
-        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            this.bufferedDirection = Vector3.right;
-        }
-        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            this.bufferedDirection = Vector3.back;
+        var newDirection = Vector3.zero;
 
-        }
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+            newDirection = Vector3.forward;
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+            newDirection = Vector3.right;
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+            newDirection = Vector3.back;
         else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            newDirection = Vector3.left;
+
+        if (newDirection != Vector3.zero 
+            && (newDirection != this.bufferedDirection || this.bufferedDirection == Vector3.zero))
         {
-            this.bufferedDirection = Vector3.left;
+            this.bufferedDirection = newDirection;
+            this.pacman.BufferDirection(this.bufferedDirection);
         }
     }
 }
