@@ -72,37 +72,10 @@ public class Pacman : MonoBehaviour
 
     private void Move()
     {
-        StopWhenNoTileInFront();
-
         UpdateCurrentDirectionFromBuffer();
 
-        this.transform.position += this.CurrentDirection * Time.deltaTime * this.speed;
-    }
-
-    private void StopWhenNoTileInFront()
-    {
-        if (this.isPaused)
-            return;
-
-        var destinationTile = this.currentTile.TileAtOffset(this.CurrentDirection);
-
-        if (destinationTile != null)
-            return;
-
-        var destinationTilePosition = this.currentTile.transform.position + this.CurrentDirection;
-
-        if (Distance2D(transform.position, destinationTilePosition) > 0.99f)
-            return;
-
-        DirectionBeforePause = CurrentDirection;
-        CurrentDirection = Vector3.zero;
-        transform.position = new Vector3
-        (
-            this.currentTile.transform.position.x,
-            transform.position.y,
-            this.currentTile.transform.position.z
-        );
-        this.isPaused = true;
+        //this.transform.position += this.CurrentDirection * Time.deltaTime * this.speed;
+        GetComponent<Rigidbody>().MovePosition(this.CurrentDirection * Time.deltaTime * this.speed);
     }
 
     private void UpdateCurrentDirectionFromBuffer()
