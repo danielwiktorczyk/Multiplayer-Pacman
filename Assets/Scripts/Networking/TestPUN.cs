@@ -5,9 +5,14 @@ using UnityEngine;
 public class TestPUN : MonoBehaviourPunCallbacks
 {
 
+    private void Awake()
+    {
+        PhotonNetwork.AutomaticallySyncScene = true;
+    }
+
     void Start()
     {
-        Connect();
+        //Connect();
     }
 
     public void Connect()
@@ -47,6 +52,7 @@ public class TestPUN : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("==Successfully JOINED a room==");
+        PhotonNetwork.LoadLevel(1);
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
