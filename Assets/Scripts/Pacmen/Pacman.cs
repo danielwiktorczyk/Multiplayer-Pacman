@@ -248,8 +248,6 @@ public class Pacman : MonoBehaviour
 
         pellet.OnPickedUp();
 
-
-        Debug.Log(this.photonView.IsMine);
         if (this.photonView.IsMine)
             this.audioManager.PlayPelletSound();
 

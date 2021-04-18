@@ -10,13 +10,20 @@ public class Pellet : MonoBehaviour
 
     private AudioManager audioManager;
     public PhotonView photonView;
+    public GameManager gameManager;
+
 
     private bool isRemovedFromPlay;
+
+    private static int TotalRemainingPellets;
 
     private void Awake()
     {
         this.audioManager = FindObjectOfType<AudioManager>();
         this.photonView = GetComponent<PhotonView>();
+        this.gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+
+        TotalRemainingPellets += 1;
     }
 
     public bool IsRemovedFromPlay()
@@ -40,6 +47,10 @@ public class Pellet : MonoBehaviour
         this.gameObject.SetActive(false);
 
         RemoveFromPlay();
+
+        TotalRemainingPellets -= 1;
+        if (TotalRemainingPellets <= 0)
+            this.gameManager.EndGame();
     }
 
     private void RemoveFromPlay()

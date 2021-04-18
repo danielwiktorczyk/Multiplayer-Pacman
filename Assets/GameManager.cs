@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,8 +7,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
 	private const string roomName = "TheOneRoomToRuleThemAllAndInTheDarkenssBindThem";
 
-	private const string player1 = "player1";
-	private const string player2 = "player2";
+	private const string player1Name = "player1";
+	private const string player2Name = "player2";
+
+	private Pacman player1;
+	private Pacman player2;
 
 	[SerializeField] private Transform player1Transform;
 	[SerializeField] private Transform player2Transform;
@@ -18,6 +22,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	private float gameStartCooldown = 3f;
 	private float gameReadyCooldown = 1f;
 	private bool isGameReadyCooldownComplete;
+	private bool IsGameEnded;
 
 	private PhotonView photonView;
 
@@ -55,6 +60,26 @@ public class GameManager : MonoBehaviourPunCallbacks
 		}
 	}
 
+	internal void EndGame()
+	{
+		if (!IsGameStarted)
+			return;
+
+		IsGameStarted = false;
+		IsGameStarting = false;
+		IsGameEnded = true;
+
+		this.player1 = GameObject.FindGameObjectWithTag("player1").GetComponent<Pacman>();
+		this.player2 = GameObject.FindGameObjectWithTag("player2").GetComponent<Pacman>();
+
+		if (this.player1.Score == this.player2.Score)
+			this.gameStatusUI.text = "Tie!";
+		else if (this.player1.Score > this.player2.Score)
+			this.gameStatusUI.text = "Player1 Wins!";
+		else
+			this.gameStatusUI.text = "Player2 Wins!";
+	}
+
 	private void GameStartCountdown()
 	{
 		if (this.gameStartCooldown < 0)
@@ -82,13 +107,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 		if (PhotonNetwork.IsMasterClient)
 		{
 			Debug.Log("==Deploying player1, and awaiting player2 for game start==");
-			PhotonNetwork.Instantiate(player1, player1Transform.position, Quaternion.identity, 0);
+			PhotonNetwork
+				.Instantiate(player1Name, player1Transform.position, Quaternion.identity, 0);
 			this.gameStatusUI.text = "Awaiting Player2";
 		}
 		else
 		{
 			Debug.Log("==Deploying player2==");
-			PhotonNetwork.Instantiate(player2, player2Transform.position, Quaternion.identity, 0);
+			PhotonNetwork
+				.Instantiate(player2Name, player2Transform.position, Quaternion.identity, 0);
 			this.photonView.RPC("StartGame", RpcTarget.All);
 		}
 	}
