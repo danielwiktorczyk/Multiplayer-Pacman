@@ -24,6 +24,8 @@ public class Pacman : MonoBehaviour
     private Vector3 startingPosition;
     private Quaternion startingRotation;
 
+    private AudioManager audioManager;
+
     public Tile CurrentTile()
     {
         return this.currentTile;
@@ -35,6 +37,8 @@ public class Pacman : MonoBehaviour
 
         this.startingPosition = transform.position;
         this.startingRotation = transform.rotation;
+
+        this.audioManager = FindObjectOfType<AudioManager>();
     }
 
     internal void BufferDirection(Vector3 bufferedDirection)
@@ -254,6 +258,7 @@ public class Pacman : MonoBehaviour
     {
         // TODO animation
 
+        this.audioManager.PlaySpookedSound();
 
         // Eventually, 
         Respawn();
