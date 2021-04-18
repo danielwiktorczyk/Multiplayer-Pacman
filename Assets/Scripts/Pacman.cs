@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Pacman : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class Pacman : MonoBehaviour
     private Vector3 bufferedDirection;
 
     private bool isPaused;
+
+    public int Score;
+    [SerializeField] private Text scoreText;
 
     public Tile CurrentTile()
     {
@@ -185,6 +189,12 @@ public class Pacman : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("Pellet"))
+        {
+            CollectPellet(other.GetComponent<Pellet>());
+            return;
+        }
+        
         var tile = other.GetComponent<Tile>();
 
         if (tile != null)
@@ -201,6 +211,13 @@ public class Pacman : MonoBehaviour
                 this.currentTile.transform.position.z + this.CurrentDirection.z
             );
         }
+    }
+
+    private void CollectPellet(Pellet pellet)
+    {
+        pellet.OnPickedUp();
+        Score += 1;
+        this.scoreText.text = $"P1 Score : {Score}";
     }
 
     private void OnTriggerExit(Collider other)
