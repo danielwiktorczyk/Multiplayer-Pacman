@@ -115,9 +115,29 @@ public class Ghost : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Tile"))
+        if (other.CompareTag("Tile"))
+        {
+            EnterNewTile(other);
             return;
+        }
 
+        if (other.CompareTag("player1") || other.CompareTag("player2"))
+        {
+            SpookPlayer(other);
+            return;
+        }
+
+    }
+
+    private void SpookPlayer(Collider other)
+    {
+        var pacman = other.GetComponent<Pacman>();
+
+        pacman.GetSpooked();
+    }
+
+    private void EnterNewTile(Collider other)
+    {
         var tile = other.GetComponent<Tile>();
 
         if (tile != null)

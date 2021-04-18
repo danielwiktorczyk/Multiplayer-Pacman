@@ -9304,12 +9304,12 @@ Transform:
   - {fileID: 603695061}
   - {fileID: 645986021}
   - {fileID: 1423133527}
-  - {fileID: 1220030484}
-  - {fileID: 298045512}
-  - {fileID: 289422349}
   - {fileID: 1017249999}
-  - {fileID: 1296728688}
+  - {fileID: 1220030484}
+  - {fileID: 289422349}
   - {fileID: 1808090663}
+  - {fileID: 298045512}
+  - {fileID: 1296728688}
   - {fileID: 1328239874}
   - {fileID: 895667590}
   - {fileID: 193023359}
@@ -41890,7 +41890,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7272898667906515430, guid: f2f8b7df93d374246b67d3d8d9dd5cd9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.543
+      value: 0.543
       objectReference: {fileID: 0}
     - target: {fileID: 7272898667906515430, guid: f2f8b7df93d374246b67d3d8d9dd5cd9, type: 3}
       propertyPath: m_LocalPosition.y

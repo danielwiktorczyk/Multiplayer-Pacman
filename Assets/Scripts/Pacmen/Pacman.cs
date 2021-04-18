@@ -21,6 +21,9 @@ public class Pacman : MonoBehaviour
     public int Score;
     [SerializeField] private Text scoreText;
 
+    private Vector3 startingPosition;
+    private Quaternion startingRotation;
+
     public Tile CurrentTile()
     {
         return this.currentTile;
@@ -29,6 +32,9 @@ public class Pacman : MonoBehaviour
     private void Awake()
     {
         this.isPaused = true;
+
+        this.startingPosition = transform.position;
+        this.startingRotation = transform.rotation;
     }
 
     internal void BufferDirection(Vector3 bufferedDirection)
@@ -38,24 +44,7 @@ public class Pacman : MonoBehaviour
 
     void Start()
     {
-        var colliders = Physics.OverlapSphere(this.transform.position, 3f);
-        this.currentTile = colliders
-            .Where(collider => collider.GetComponent<Tile>() != null
-                && collider.gameObject != this.gameObject)
-            .Select(collider => collider.GetComponent<Tile>())
-            .OrderBy(tile => Distance2D(transform.position, tile.transform.position))
-            .First();
-        this.closestTiles = new List<Tile>
-        {
-            this.currentTile
-        };
-
-        transform.position = new Vector3
-        (
-            this.currentTile.transform.position.x,
-            transform.position.y,
-            this.currentTile.transform.position.z
-        );
+        Respawn();
     }
 
     void Update()
@@ -259,5 +248,43 @@ public class Pacman : MonoBehaviour
 
         if (tile != null)
             this.closestTiles.Remove(tile);
+    }
+
+    public void GetSpooked()
+    {
+        // TODO animation
+
+
+        // Eventually, 
+        Respawn();
+    }
+
+    public void Respawn()
+    {
+        this.isPaused = true;
+
+        transform.position = this.startingPosition;
+        transform.rotation = this.startingRotation;
+
+        var colliders = Physics.OverlapSphere(this.transform.position, 3f);
+        this.currentTile = colliders
+            .Where(collider => collider.GetComponent<Tile>() != null
+                && collider.gameObject != this.gameObject)
+            .Select(collider => collider.GetComponent<Tile>())
+            .OrderBy(tile => Distance2D(transform.position, tile.transform.position))
+            .First();
+        this.closestTiles = new List<Tile>
+        {
+            this.currentTile
+        };
+
+        transform.position = new Vector3
+        (
+            this.currentTile.transform.position.x,
+            transform.position.y,
+            this.currentTile.transform.position.z
+        );
+
+        this.CurrentDirection = Vector3.zero;
     }
 }
