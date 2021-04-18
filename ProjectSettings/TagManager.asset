@@ -10,6 +10,8 @@ TagManager:
   - player2
   - p1score
   - p2score
+  - gamestatusui
+  - GameManager
   layers:
   - Default
   - TransparentFX

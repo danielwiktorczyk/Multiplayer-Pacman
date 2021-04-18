@@ -38,7 +38,6 @@ public class Pellet : MonoBehaviour
         }
 
         this.gameObject.SetActive(false);
-        this.audioManager.PlayPelletSound();
 
         RemoveFromPlay();
     }

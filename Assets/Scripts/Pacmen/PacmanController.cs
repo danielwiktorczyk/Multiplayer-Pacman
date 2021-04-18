@@ -8,17 +8,20 @@ public class PacmanController : MonoBehaviour
     private Vector3 bufferedDirection;
 
     private PhotonView photonView;
+    private GameManager gameManager;
 
     private void Awake()
     {
         this.pacman = GetComponent<Pacman>();
-
         this.photonView = GetComponent<PhotonView>();
+        
+        this.gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
     void Update()
     {
-        if (!this.photonView.IsMine)
+        if (!this.photonView.IsMine 
+            || !this.gameManager.IsGameStarted)
             return;
 
         UpdateDirection();
@@ -38,7 +41,7 @@ public class PacmanController : MonoBehaviour
             newDirection = Vector3.left;
 
         if (newDirection != Vector3.zero 
-            && (newDirection != this.bufferedDirection || this.bufferedDirection == Vector3.zero))
+            && (newDirection != this.pacman.CurrentDirection || this.bufferedDirection == Vector3.zero))
         {
             this.bufferedDirection = newDirection;
             this.pacman.BufferDirection(this.bufferedDirection);

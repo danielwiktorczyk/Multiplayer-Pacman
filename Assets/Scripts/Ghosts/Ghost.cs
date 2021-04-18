@@ -131,11 +131,11 @@ public class Ghost : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!PhotonNetwork.IsMasterClient)
-            return;
-
         if (other.CompareTag("Tile"))
         {
+            if (!PhotonNetwork.IsMasterClient)
+                return; // only the master should move them
+
             EnterNewTile(other);
             return;
         }

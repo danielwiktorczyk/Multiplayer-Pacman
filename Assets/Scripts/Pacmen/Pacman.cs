@@ -213,6 +213,8 @@ public class Pacman : MonoBehaviour
 
         if (other.CompareTag("Tile"))
         {
+            if (!this.photonView.IsMine)
+                return;
             EnterNewTile(other);
             return;
         }
@@ -245,6 +247,12 @@ public class Pacman : MonoBehaviour
             return;
 
         pellet.OnPickedUp();
+
+
+        Debug.Log(this.photonView.IsMine);
+        if (this.photonView.IsMine)
+            this.audioManager.PlayPelletSound();
+
         if (pellet.SpeedBoost)
             BoostSpeed();
 
@@ -270,6 +278,15 @@ public class Pacman : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (other.CompareTag("Tile"))
+            RemoveTileFromClosestTiles(other);
+    }
+
+    private void RemoveTileFromClosestTiles(Collider other)
+    {
+        if (!this.photonView.IsMine)
+            return;
+
         var tile = other.GetComponent<Tile>();
 
         if (tile != null)
@@ -278,11 +295,11 @@ public class Pacman : MonoBehaviour
 
     public void GetSpooked()
     {
-        // TODO animation
+        if (!this.photonView.IsMine)
+            return;
 
         this.audioManager.PlaySpookedSound();
 
-        // Eventually, 
         Respawn();
     }
 
