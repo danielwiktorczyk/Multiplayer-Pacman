@@ -12,7 +12,6 @@ public class Ghost : MonoBehaviour
     private List<Tile> closestTiles;
 
     public Vector3 CurrentDirection;
-    private Vector3 bufferedDirection;
 
     public bool IsPaused;
 
@@ -86,6 +85,8 @@ public class Ghost : MonoBehaviour
     private void GetMovementFromController()
     {
         this.CurrentDirection = this.ghostController.GetMovement();
+        if (this.CurrentDirection == Vector3.zero)
+            return;
         this.IsPaused = false;
     }
 

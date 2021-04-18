@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ public class Pacman : MonoBehaviour
     private Quaternion startingRotation;
 
     private AudioManager audioManager;
+    private PhotonView photonView;
 
     public Tile CurrentTile()
     {
@@ -39,6 +41,17 @@ public class Pacman : MonoBehaviour
         this.startingRotation = transform.rotation;
 
         this.audioManager = FindObjectOfType<AudioManager>();
+        this.photonView = GetComponent<PhotonView>();
+
+        if (this.scoreText is null)
+        {
+            if (this.CompareTag("player1"))
+                this.scoreText = GameObject.FindGameObjectWithTag("p1score").GetComponent<Text>();
+            else
+                this.scoreText = GameObject.FindGameObjectWithTag("p2score").GetComponent<Text>();
+        }
+
+        this.closestTiles = new List<Tile>();
     }
 
     internal void BufferDirection(Vector3 bufferedDirection)
@@ -48,11 +61,17 @@ public class Pacman : MonoBehaviour
 
     void Start()
     {
+        if (!this.photonView.IsMine)
+            return;
+
         Respawn();
     }
 
     void Update()
     {
+        if (!this.photonView.IsMine)
+            return;
+
         Move();
         UpdateClosestTile();
     }

@@ -7,6 +7,9 @@ public class ClydePersonality : GhostPersonality
 {
     public override List<Vector3> GetDirections(Ghost ghost, Pacman pacman)
     {
+        if (ghost is null || pacman is null)
+            return null;
+
         var origin = ghost.transform.position;
         var target = pacman.transform.position;
 

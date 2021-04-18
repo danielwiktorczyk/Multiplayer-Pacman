@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,7 +10,6 @@ public class GhostController : MonoBehaviour
 
     private Ghost ghost;
 
-    private Vector3 previousDirection;
     private Vector3 currentDirection;
 
     private Pacman player1;
@@ -20,15 +20,39 @@ public class GhostController : MonoBehaviour
     {
         this.ghost = GetComponent<Ghost>();
 
-        this.player1 = GameObject.FindGameObjectWithTag("player1").GetComponent<Pacman>();
-        this.player2 = GameObject.FindGameObjectWithTag("player2")?.GetComponent<Pacman>();
 
         this.closestPlayer = this.player1;
     }
 
     private void Update()
     {
+        if (this.player1 is null || this.player2 is null)
+        {
+            TryToFindPlayers();
+            return;
+        }
+
+
         DetermineClosestPlayer();
+    }
+
+    private void TryToFindPlayers()
+    {
+        if (this.player1 is null)
+        {
+            var player1GO = GameObject.FindGameObjectWithTag("player1");
+            if (player1GO is null)
+                return;
+            this.player1 = player1GO.GetComponent<Pacman>();
+        }
+
+        if (this.player2 is null)
+        {
+            var player2GO = GameObject.FindGameObjectWithTag("player2");
+            if (player2GO is null)
+                return;
+            this.player2 = player2GO.GetComponent<Pacman>();
+        }
     }
 
     private void DetermineClosestPlayer()
@@ -60,7 +84,11 @@ public class GhostController : MonoBehaviour
         this.currentDirection = DetermineBestDirectionFromBehaviour(availableDirections);
 
         if (this.currentDirection == Vector3.zero)
-            Debug.LogError("Should have determined the best direction to take!");
+        {
+            //Debug.LogWarning("No directions were provided. Maybe pacman was null? Choosing an arbiturary one instead");
+            //this.currentDirection = GetRandomDirection(availableDirections);
+            this.currentDirection = Vector3.zero;
+        }
 
         return this.currentDirection;
     }
@@ -68,6 +96,10 @@ public class GhostController : MonoBehaviour
     private Vector3 DetermineBestDirectionFromBehaviour(List<Vector3> availableDirections)
     {
         var desiredDirections = this.ghostPersonality.GetDirections(this.ghost, this.closestPlayer);
+
+        if (desiredDirections is null)
+            return Vector3.zero;
+
         while (desiredDirections.Count() > 0)
         {
             var consideredDirection = desiredDirections.First();
@@ -89,13 +121,11 @@ public class GhostController : MonoBehaviour
 
     private static Vector3 GetRandomDirection(List<Vector3> directions)
     {
-        return directions.ToArray()[Random.Range(0, directions.Count())];
+        return directions.ToArray()[UnityEngine.Random.Range(0, directions.Count())];
     }
 
     private List<Vector3> AvailableDirections()
     {
-        this.previousDirection = this.currentDirection;
-
         var currentTile = this.ghost.CurrentTile();
         var center = currentTile.transform.position;
         var directions = new List<Vector3>
@@ -137,6 +167,9 @@ public class GhostController : MonoBehaviour
 
     internal Vector3 GetMovement()
     {
+        if (this.player1 is null)
+            return Vector3.zero;
+
         return NewDirection();
     }
 }

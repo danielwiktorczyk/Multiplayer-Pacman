@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class PacmanController : MonoBehaviour
@@ -6,13 +7,20 @@ public class PacmanController : MonoBehaviour
 
     private Vector3 bufferedDirection;
 
+    private PhotonView photonView;
+
     private void Awake()
     {
         this.pacman = GetComponent<Pacman>();
+
+        this.photonView = GetComponent<PhotonView>();
     }
 
     void Update()
     {
+        if (!this.photonView.IsMine)
+            return;
+
         UpdateDirection();
     }
 
