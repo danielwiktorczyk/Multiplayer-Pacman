@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,8 +17,7 @@ public class Ghost : MonoBehaviour
     public bool IsPaused;
 
     private GhostController ghostController;
-
-    private float cool;
+    //private PhotonView photonView;
 
     public Tile CurrentTile()
     {
@@ -28,21 +28,12 @@ public class Ghost : MonoBehaviour
     {
         this.IsPaused = true;
         this.ghostController = GetComponent<GhostController>();
+        //this.photonView = GetComponent<PhotonView>();
     }
 
     void Start()
     {
-        var colliders = Physics.OverlapSphere(this.transform.position, 3f);
-        this.currentTile = colliders
-            .Where(collider => collider.GetComponent<Tile>() != null
-                && collider.gameObject != this.gameObject)
-            .Select(collider => collider.GetComponent<Tile>())
-            .OrderBy(tile => Distance2D(transform.position, tile.transform.position))
-            .First();
-        this.closestTiles = new List<Tile>
-        {
-            this.currentTile
-        };
+        HardUpdateClosestTiles();
 
         transform.position = new Vector3
         (
@@ -56,15 +47,39 @@ public class Ghost : MonoBehaviour
 
     void Update()
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
         Move();
         UpdateClosestTile();
     }
 
     private void UpdateClosestTile()
     {
+        if (this.closestTiles.Count() == 0)
+        {
+            HardUpdateClosestTiles();
+            return;
+        }
+
         this.currentTile = closestTiles
             .OrderBy(tile => Distance2D(transform.position, tile.transform.position))
             .First();
+    }
+
+    private void HardUpdateClosestTiles()
+    {
+        var colliders = Physics.OverlapSphere(this.transform.position, 3f);
+        this.currentTile = colliders
+            .Where(collider => collider.GetComponent<Tile>() != null
+                && collider.gameObject != this.gameObject)
+            .Select(collider => collider.GetComponent<Tile>())
+            .OrderBy(tile => Distance2D(transform.position, tile.transform.position))
+            .First();
+        this.closestTiles = new List<Tile>
+            {
+                this.currentTile
+            };
     }
 
     public float Distance2D(Vector3 a, Vector3 b)
@@ -116,6 +131,9 @@ public class Ghost : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
         if (other.CompareTag("Tile"))
         {
             EnterNewTile(other);
@@ -159,6 +177,9 @@ public class Ghost : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
         var tile = other.GetComponent<Tile>();
 
         if (tile != null)

@@ -14,10 +14,10 @@ GameObject:
   - component: {fileID: 3205521647715603823}
   - component: {fileID: 8225076470709459410}
   - component: {fileID: 8061546779569829140}
-  - component: {fileID: 7147774161013427635}
   - component: {fileID: 5894113222769213669}
   - component: {fileID: 5764753335047016455}
   - component: {fileID: 2629041724843339491}
+  - component: {fileID: 1683882868170657554}
   m_Layer: 0
   m_Name: Ghost
   m_TagString: Untagged
@@ -131,21 +131,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ghostPersonality: {fileID: 5894113222769213669}
---- !u!114 &7147774161013427635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2182988849417679382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12abf7936ca835b4fbcb01f57dbabcf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 3
-  CurrentDirection: {x: 0, y: 0, z: 0}
-  IsPaused: 0
 --- !u!114 &5894113222769213669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,3 +199,18 @@ MonoBehaviour:
   sceneViewId: 3
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &1683882868170657554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2182988849417679382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12abf7936ca835b4fbcb01f57dbabcf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+  CurrentDirection: {x: 0, y: 0, z: 0}
+  IsPaused: 0

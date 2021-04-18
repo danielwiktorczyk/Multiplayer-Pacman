@@ -241,6 +241,9 @@ public class Pacman : MonoBehaviour
 
     private void CollectPellet(Pellet pellet)
     {
+        if (pellet.IsRemovedFromPlay())
+            return;
+
         pellet.OnPickedUp();
         if (pellet.SpeedBoost)
             BoostSpeed();
