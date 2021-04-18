@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -81,7 +83,8 @@ public class Pacman : MonoBehaviour
         UpdateCurrentDirectionFromBuffer();
 
         this.transform.position += this.CurrentDirection * Time.deltaTime * this.speed;
-        this.transform.rotation = Quaternion.LookRotation(this.CurrentDirection, Vector3.up);
+        if (this.CurrentDirection != Vector3.zero)
+            this.transform.rotation = Quaternion.LookRotation(this.CurrentDirection, Vector3.up);
     }
 
     private void StopWhenNoTileInFront()
@@ -227,8 +230,27 @@ public class Pacman : MonoBehaviour
     private void CollectPellet(Pellet pellet)
     {
         pellet.OnPickedUp();
+        if (pellet.SpeedBoost)
+            BoostSpeed();
+
         Score += 1;
         this.scoreText.text = $"P1 Score : {Score}";
+    }
+
+    private void BoostSpeed()
+    {
+        this.speed *= 2;
+
+        StartCoroutine(RevertSpeedIn(5f));
+    }
+
+    private IEnumerator RevertSpeedIn(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        this.speed /= 2;
+
+        yield return null;
     }
 
     private void OnTriggerExit(Collider other)
@@ -238,5 +260,4 @@ public class Pacman : MonoBehaviour
         if (tile != null)
             this.closestTiles.Remove(tile);
     }
-
 }

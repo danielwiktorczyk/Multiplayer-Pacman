@@ -115,6 +115,9 @@ public class Ghost : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!other.CompareTag("Tile"))
+            return;
+
         var tile = other.GetComponent<Tile>();
 
         if (tile != null)

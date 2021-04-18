@@ -9,6 +9,7 @@ public class Tile : MonoBehaviour
     public bool SpawnPelletAbove = true;
 
     [SerializeField] private GameObject pelletToSpawn;
+    [SerializeField] private GameObject speedPelletToSpawn;
 
     public Tile WarpTile;
     public bool warpUp;
@@ -20,6 +21,8 @@ public class Tile : MonoBehaviour
     public Tile Right;
     public Tile Back;
     public Tile Left;
+
+    public bool SpawnSpeedPellet;
 
     private void Awake()
     {
@@ -37,7 +40,9 @@ public class Tile : MonoBehaviour
     {
         if (!this.SpawnPelletAbove)
             return;
-        var pellet = Instantiate(this.pelletToSpawn.gameObject, this.transform);
+
+        var pelletToSpawn = SpawnSpeedPellet ? this.speedPelletToSpawn : this.pelletToSpawn;
+        var pellet = Instantiate(pelletToSpawn.gameObject, this.transform);
         pellet.transform.position = this.transform.position;
     }
 

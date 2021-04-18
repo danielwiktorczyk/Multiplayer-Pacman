@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Pellet : MonoBehaviour
 {
+    public bool SpeedBoost;
 
     internal void OnPickedUp()
     {

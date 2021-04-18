@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7386043028531213078}
   m_Layer: 0
   m_Name: Path
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -111,8 +111,14 @@ MonoBehaviour:
   Neighbors: []
   SpawnPelletAbove: 1
   pelletToSpawn: {fileID: 1658742386130758399, guid: 2d87ca1ade82a9b4a910ba5c447a9548, type: 3}
+  speedPelletToSpawn: {fileID: 3822596966298508834, guid: 8bef8ae9c14c4974cb8641fd837b5c28, type: 3}
   WarpTile: {fileID: 0}
+  warpUp: 0
+  warpRight: 0
+  warpDown: 0
+  warpLeft: 0
   Forward: {fileID: 0}
   Right: {fileID: 0}
   Back: {fileID: 0}
   Left: {fileID: 0}
+  SpawnSpeedPellet: 0
