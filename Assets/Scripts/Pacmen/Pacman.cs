@@ -255,7 +255,8 @@ public class Pacman : MonoBehaviour
             BoostSpeed();
 
         Score += 1;
-        this.scoreText.text = $"P1 Score : {Score}";
+        var playerName = this.CompareTag("player1") ? "P1" : "P2";
+        this.scoreText.text = $"{playerName} Score : {Score}";
     }
 
     private void BoostSpeed()
