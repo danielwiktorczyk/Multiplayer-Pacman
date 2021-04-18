@@ -81,6 +81,7 @@ public class Pacman : MonoBehaviour
         UpdateCurrentDirectionFromBuffer();
 
         this.transform.position += this.CurrentDirection * Time.deltaTime * this.speed;
+        this.transform.rotation = Quaternion.LookRotation(this.CurrentDirection, Vector3.up);
     }
 
     private void StopWhenNoTileInFront()
@@ -194,7 +195,17 @@ public class Pacman : MonoBehaviour
             CollectPellet(other.GetComponent<Pellet>());
             return;
         }
-        
+
+        if (other.CompareTag("Tile"))
+        {
+            EnterNewTile(other);
+            return;
+        }
+
+    }
+
+    private void EnterNewTile(Collider other)
+    {
         var tile = other.GetComponent<Tile>();
 
         if (tile != null)
