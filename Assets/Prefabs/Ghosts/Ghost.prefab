@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8225076470709459410}
   - component: {fileID: 8061546779569829140}
   - component: {fileID: 7147774161013427635}
+  - component: {fileID: 5894113222769213669}
   m_Layer: 0
   m_Name: Ghost
   m_TagString: Untagged
@@ -63,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1a4e9640964da0348a4d5c915dc5f212, type: 2}
+  - {fileID: 2100000, guid: f9787b00a6823d3418673a5e6637b065, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -127,6 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e0194177cf1cad49b6ef7770df1f46b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ghostPersonality: {fileID: 5894113222769213669}
 --- !u!114 &7147774161013427635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,4 +143,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   CurrentDirection: {x: 0, y: 0, z: 0}
-  DirectionBeforePause: {x: 0, y: 0, z: 0}
+  IsPaused: 0
+--- !u!114 &5894113222769213669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2182988849417679382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c1b040435b356b449e54b48c69d57d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
