@@ -17,6 +17,7 @@ public class Ghost : MonoBehaviour
     public bool IsPaused;
 
     private GhostController ghostController;
+    private PhotonView photonView;
     //private PhotonView photonView;
 
     public Tile CurrentTile()
@@ -28,6 +29,7 @@ public class Ghost : MonoBehaviour
     {
         this.IsPaused = true;
         this.ghostController = GetComponent<GhostController>();
+        this.photonView = GetComponent<PhotonView>();
         //this.photonView = GetComponent<PhotonView>();
     }
 
@@ -41,8 +43,10 @@ public class Ghost : MonoBehaviour
             transform.position.y,
             this.currentTile.transform.position.z
         );
-
-        //GetMovementFromController();
+        this.photonView.RPC("UpdateTransform",
+            RpcTarget.Others,
+            this.transform.position,
+            this.transform.rotation);
     }
 
     void Update()
@@ -95,6 +99,10 @@ public class Ghost : MonoBehaviour
             GetMovementFromController();
 
         this.transform.position += this.CurrentDirection * Time.deltaTime * this.speed;
+        this.photonView.RPC("UpdateTransform",
+            RpcTarget.Others,
+            this.transform.position,
+            this.transform.rotation);
     }
 
     private void GetMovementFromController()
@@ -118,6 +126,10 @@ public class Ghost : MonoBehaviour
             transform.position.y,
             this.currentTile.transform.position.z
         );
+        this.photonView.RPC("UpdateTransform",
+            RpcTarget.Others,
+            this.transform.position,
+            this.transform.rotation);
         this.IsPaused = true;
     }
 
@@ -172,6 +184,10 @@ public class Ghost : MonoBehaviour
                 transform.position.y,
                 this.currentTile.transform.position.z + this.CurrentDirection.z
             );
+            this.photonView.RPC("UpdateTransform", 
+                RpcTarget.Others, 
+                this.transform.position, 
+                this.transform.rotation);
         }
     }
 
@@ -217,5 +233,12 @@ public class Ghost : MonoBehaviour
 
 
         return false;
+    }
+
+    [PunRPC]
+    public void UpdateTransform(Vector3 position, Quaternion rotation)
+    {
+        this.transform.position = position;
+        this.transform.rotation = rotation;
     }
 }

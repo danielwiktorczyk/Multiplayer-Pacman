@@ -11,7 +11,7 @@ public class InGameMenuUIController : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        playerNameLabel.text = PhotonNetwork.NickName;
+        this.playerNameLabel.text = PhotonNetwork.NickName;
     }
 
     public override void OnLeftRoom()

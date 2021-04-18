@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	private void Awake()
 	{
 		this.gameStatusUI = GameObject.FindGameObjectWithTag("gamestatusui").GetComponent<Text>();
+
 		this.photonView = GetComponent<PhotonView>();
 	}
 
