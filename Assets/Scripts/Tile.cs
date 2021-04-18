@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,6 +6,15 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     public List<Tile> Neighbors;
+    public bool SpawnPelletAbove = true;
+
+    [SerializeField] private GameObject pelletToSpawn;
+
+    public Tile WarpTile;
+    public bool warpUp;
+    public bool warpRight;
+    public bool warpDown;
+    public bool warpLeft;
 
     public Tile Forward;
     public Tile Right;
@@ -19,6 +29,16 @@ public class Tile : MonoBehaviour
     void Start()
     {
         GetNeighbors();
+
+        SpawnPellet();
+    }
+
+    private void SpawnPellet()
+    {
+        if (!this.SpawnPelletAbove)
+            return;
+        var pellet = Instantiate(this.pelletToSpawn.gameObject, this.transform);
+        pellet.transform.position = this.transform.position;
     }
 
     private void GetNeighbors()
@@ -44,6 +64,17 @@ public class Tile : MonoBehaviour
             .Where(tile => Vector3.Distance(tile.transform.position, transform.position + Vector3.left) < 0.5f)
             .FirstOrDefault();
 
+        if (WarpTile != null)
+        {
+            if (this.warpUp)
+                Forward = WarpTile;
+            else if (this.warpRight)
+                Right = WarpTile;
+            else if (this.warpDown)
+                Back = WarpTile;
+            else if (this.warpLeft)
+                Left = WarpTile;
+        }
     }
 
     private void Calibrate()
@@ -58,9 +89,19 @@ public class Tile : MonoBehaviour
 
     public Tile TileAtOffset(Vector3 direction)
     {
-        return Neighbors
-            .Where(tile => tile.transform.position == transform.position + direction)
-            .FirstOrDefault();
+        if (direction == Vector3.forward)
+            return Forward;
+
+        if (direction == Vector3.right)
+            return Right;
+
+        if (direction == Vector3.back)
+            return Back;
+
+        if (direction == Vector3.left)
+            return Left;
+
+        return null;
     }
 
     public Tile TileDirectlyInFront(Vector3 center, Vector3 direction)

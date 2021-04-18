@@ -189,6 +189,18 @@ public class Pacman : MonoBehaviour
 
         if (tile != null)
             this.closestTiles.Add(tile);
+
+        if (tile.WarpTile != null)
+        {
+            this.currentTile = tile.WarpTile;
+            this.closestTiles = new List<Tile> { this.currentTile };
+            transform.position = new Vector3
+            (
+                this.currentTile.transform.position.x + this.CurrentDirection.x,
+                transform.position.y,
+                this.currentTile.transform.position.z + this.CurrentDirection.z
+            );
+        }
     }
 
     private void OnTriggerExit(Collider other)
