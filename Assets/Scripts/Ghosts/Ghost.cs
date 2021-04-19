@@ -43,10 +43,9 @@ public class Ghost : MonoBehaviour
             transform.position.y,
             this.currentTile.transform.position.z
         );
-        this.photonView.RPC("UpdateTransform",
+        this.photonView.RPC("UpdatePosition",
             RpcTarget.Others,
-            this.transform.position,
-            this.transform.rotation);
+            this.transform.position);
     }
 
     void Update()
@@ -99,10 +98,9 @@ public class Ghost : MonoBehaviour
             GetMovementFromController();
 
         this.transform.position += this.CurrentDirection * Time.deltaTime * this.speed;
-        this.photonView.RPC("UpdateTransform",
+        this.photonView.RPC("UpdatePosition",
             RpcTarget.Others,
-            this.transform.position,
-            this.transform.rotation);
+            this.transform.position);
     }
 
     private void GetMovementFromController()
@@ -126,10 +124,9 @@ public class Ghost : MonoBehaviour
             transform.position.y,
             this.currentTile.transform.position.z
         );
-        this.photonView.RPC("UpdateTransform",
+        this.photonView.RPC("UpdatePosition",
             RpcTarget.Others,
-            this.transform.position,
-            this.transform.rotation);
+            this.transform.position);
         this.IsPaused = true;
     }
 
@@ -184,10 +181,9 @@ public class Ghost : MonoBehaviour
                 transform.position.y,
                 this.currentTile.transform.position.z + this.CurrentDirection.z
             );
-            this.photonView.RPC("UpdateTransform", 
+            this.photonView.RPC("UpdatePosition", 
                 RpcTarget.Others, 
-                this.transform.position, 
-                this.transform.rotation);
+                this.transform.position);
         }
     }
 
@@ -236,9 +232,8 @@ public class Ghost : MonoBehaviour
     }
 
     [PunRPC]
-    public void UpdateTransform(Vector3 position, Quaternion rotation)
+    public void UpdatePosition(Vector3 position)
     {
         this.transform.position = position;
-        this.transform.rotation = rotation;
     }
 }
