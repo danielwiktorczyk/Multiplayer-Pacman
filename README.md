@@ -2,7 +2,7 @@ Multiplayer Pacman - Assignment 3
 
 Daniel Wiktorczyk - 40060894 
 
-The code is also available at https://github.com/danielwiktorczyk/Multiplayer-Pacman , which will be made public after the final submission due date
+The code is also available at https://github.com/danielwiktorczyk/Multiplayer-Pacman , which will be made public after the demonstrations
 
 
 In this write up, I will cover each section of the assignment3 individually.
@@ -15,7 +15,7 @@ Notably, **the extra special features** I have added include:
 	Pinky will try to ambush pacman by aiming for the spot several tiles ahead of the closest pacman
 	Inky and Clyde, for simplicity, try to ambush the closest pacman from his left and right side similar to Pinky
 	I used the **strategy design pattern** to accomplish this
-	Please use the **pause and play** scene view to see the Debug.lines involved. 
+	Please run two Unity inspectors (using ParalelSync shown in the labs) and use the **pause and play** scene view to see the Debug.lines involved. 
 		Note that these decisions are made only when a ghost is near / at the center of a tile, so you'll need a few next frames to see the lines again
 - I use a **buffered input system**, similar to classic pacman:
 	If pacman cannot yet make a turn in the inputted direction, it is added to the buffered
@@ -27,14 +27,20 @@ Notably, **the extra special features** I have added include:
 	which provides more strategy oppertunities for the player
 - There's a countdown UI that begins only when both players succesfully join. 
 
-To play, there's only one scene, which is added to the build 
+**To play, I included a Build** in the submission that you can run two windowed instances at once. Otherwise, the build settings are also updated. 
 
-If you want to test just the gameplay features atomically: 
-- *disable Player2*. 
+I decided not to go for a lobby, and instead have the main screen in a paused state until the player2 joins. Less button clicking! 
+
+Controls: WASD and/or Arrow keys
+
+If you want to test the game in Scene view, I heavily suggest the following: 
+- Use ParrelSync https://github.com/VeriorPies/ParrelSync (shown in the labs) to run two unity insepctors at once
+- Pause and play next frame to see the Debug.Lines every time a ghost makes a movement decision (every time they come to a tile's center)
 
 
 R1 	Level Environment
 *All parts completed as follows:*
+
 - The level is 28 x 31 tiles, with every element fitting within a 1x1x1 cube
 - All elements are 3D, viewed isometrically such that shadows do not get in the way
 - The level is based on the traditional stage, but without the ghost-cage requirement, it reforms the center so that it may be better used (ghosts start at the top instead)
@@ -78,9 +84,13 @@ R2	Networked Multiplayer Pacman Game:
 - On collision with a PC, that PC is Spooked! and goes back to its starting position. A sound also plays here too! 
 	
 2.5 
-- WIP the other pacman's and ghosts' movements are not updated as quickly. 
+- I optimized the movement of the ghosts to minimize data transfer. Only the PCs have a PhotonViewTransform attached. 
+- I also tried to minimize the shared data as much as possible
+- Note that once in a while, a call is lost (e.g. a pellet or two is not updated on the client by game end). 
 
-I tried to maintain a consistent coding style, with regular extraction of methods and naming of variable. Also, I have divided the file structure frequently. 
+
+Other notes:
+- I tried to maintain a consistent coding style, with regular extraction of methods and naming of variable. Also, I have divided the file structure frequently. 
 
 
 I hope you enjoy, and Thank you! 
